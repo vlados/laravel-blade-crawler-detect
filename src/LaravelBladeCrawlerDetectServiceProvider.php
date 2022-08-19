@@ -22,7 +22,7 @@ class LaravelBladeCrawlerDetectServiceProvider extends PackageServiceProvider
 
     public function packageBooted()
     {
-        $crawlerDetect = app(CrawlerDetect::class);
+        $crawlerDetect = app(\Jaybizzle\CrawlerDetect\CrawlerDetect::class);
 
         $crawlers = new Crawlers();
         $exclusions = new Exclusions();
