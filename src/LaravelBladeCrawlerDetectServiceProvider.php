@@ -3,11 +3,8 @@
 namespace Vlados\LaravelBladeCrawlerDetect;
 
 use Illuminate\Support\Facades\Blade;
-use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Jaybizzle\CrawlerDetect\Fixtures\Crawlers;
 use Jaybizzle\CrawlerDetect\Fixtures\Exclusions;
-use Jaybizzle\CrawlerDetect\Fixtures\Headers;
-use Jaybizzle\LaravelCrawlerDetect\Facades\LaravelCrawlerDetect;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
