@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-blade-crawler-detect` will be documented in this file.
 
+## v0.3.0 - 2023-04-19
+
+Laravel 10
+
 ## v0.2.0 - 2022-08-19
 
 - Add Lighthouse as ignored
