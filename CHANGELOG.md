@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-blade-crawler-detect` will be documented in this file.
 
+## v0.4.0 - 2025-10-01
+
+Add Laravel 12 support
+
 ## v0.3.0 - 2023-04-19
 
 Laravel 10
