@@ -38,3 +38,16 @@ it('hides content from Chrome-Lighthouse', function () {
 
     expect(trim($rendered))->toBe('');
 });
+
+it('clamps oversized user agents to prevent ReDoS', function () {
+    $this->app['request'] = Request::create('/', 'GET', [], [], [], [
+        'HTTP_USER_AGENT' => str_repeat('a', 100_000),
+    ]);
+
+    $start = microtime(true);
+    $rendered = Blade::render('@user human @enduser');
+    $elapsed = microtime(true) - $start;
+
+    expect(trim($rendered))->toBe('human');
+    expect($elapsed)->toBeLessThan(1.0);
+});

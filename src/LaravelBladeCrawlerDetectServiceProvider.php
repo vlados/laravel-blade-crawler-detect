@@ -11,6 +11,8 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LaravelBladeCrawlerDetectServiceProvider extends PackageServiceProvider
 {
+    private const MAX_USER_AGENT_LENGTH = 2048;
+
     public function packageRegistered()
     {
         $this->app->singleton(CrawlerDetect::class, fn () => new CrawlerDetect());
@@ -30,6 +32,10 @@ class LaravelBladeCrawlerDetectServiceProvider extends PackageServiceProvider
 
         Blade::if('user', function () use ($compiledRegex, $compiledExclusions) {
             $userAgent = request()?->userAgent() ?? $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+            // Clamp before any regex runs: the UA header is attacker-controlled
+            // and unbounded input against complex crawler patterns risks ReDoS.
+            $userAgent = substr((string) $userAgent, 0, self::MAX_USER_AGENT_LENGTH);
 
             $agent = trim((string) preg_replace(
                 "/{$compiledExclusions}/i",
