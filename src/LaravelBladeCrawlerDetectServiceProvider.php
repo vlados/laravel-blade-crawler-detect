@@ -3,6 +3,7 @@
 namespace Vlados\LaravelBladeCrawlerDetect;
 
 use Illuminate\Support\Facades\Blade;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Jaybizzle\CrawlerDetect\Fixtures\Crawlers;
 use Jaybizzle\CrawlerDetect\Fixtures\Exclusions;
 use Spatie\LaravelPackageTools\Package;
@@ -12,39 +13,36 @@ class LaravelBladeCrawlerDetectServiceProvider extends PackageServiceProvider
 {
     public function packageRegistered()
     {
-        $this->app->singleton('CrawlerDetect', function () {
-            return new \Jaybizzle\CrawlerDetect\CrawlerDetect();
-        });
+        $this->app->singleton(CrawlerDetect::class, fn () => new CrawlerDetect());
+        $this->app->alias(CrawlerDetect::class, 'CrawlerDetect');
     }
 
     public function packageBooted()
     {
-        $crawlerDetect = app(\Jaybizzle\CrawlerDetect\CrawlerDetect::class);
+        $crawlerDetect = $this->app->make(CrawlerDetect::class);
 
-        $crawlers = new Crawlers();
-        $exclusions = new Exclusions();
-
-        $crawlerList = $crawlers->getAll();
+        $crawlerList = (new Crawlers())->getAll();
         $crawlerList[] = 'Chrome-Lighthouse';
         $crawlerList[] = 'Google Page Speed';
+
         $compiledRegex = $crawlerDetect->compileRegex($crawlerList);
-        $compiledExclusions = $crawlerDetect->compileRegex($exclusions->getAll());
+        $compiledExclusions = $crawlerDetect->compileRegex((new Exclusions())->getAll());
 
-        $agent = trim(preg_replace(
-            "/{$compiledExclusions}/i",
-            '',
-            invade($crawlerDetect)->userAgent ?: ''
-        ));
+        Blade::if('user', function () use ($compiledRegex, $compiledExclusions) {
+            $userAgent = request()?->userAgent() ?? $_SERVER['HTTP_USER_AGENT'] ?? '';
 
+            $agent = trim((string) preg_replace(
+                "/{$compiledExclusions}/i",
+                '',
+                $userAgent
+            ));
 
-        Blade::if('user', function () use ($agent, $compiledRegex) {
-            return (bool) !preg_match("/{$compiledRegex}/i", $agent);
+            return $agent === '' || ! preg_match("/{$compiledRegex}/i", $agent);
         });
     }
 
     public function configurePackage(Package $package): void
     {
-        $package
-            ->name('laravel-blade-crawler-detect');
+        $package->name('laravel-blade-crawler-detect');
     }
 }
