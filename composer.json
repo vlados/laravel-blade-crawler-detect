@@ -1,15 +1,21 @@
 {
     "name": "vlados/laravel-blade-crawler-detect",
-    "description": "Blade directives that branch on whether the current request comes from a human or a crawler — show buttons, scripts and widgets to users while serving SEO-focused markup to bots.",
+    "description": "Boost Lighthouse and PageSpeed scores by hiding cookie banners, chat widgets and heavy scripts from crawlers via two Blade directives. Octane-safe.",
     "keywords": [
-        "vlados",
         "laravel",
         "blade",
+        "blade-directive",
         "crawler",
         "bot",
         "seo",
         "user-agent",
-        "googlebot"
+        "googlebot",
+        "lighthouse",
+        "pagespeed",
+        "core-web-vitals",
+        "performance",
+        "octane",
+        "cookie-banner"
     ],
     "homepage": "https://github.com/vlados/laravel-blade-crawler-detect",
     "license": "MIT",
