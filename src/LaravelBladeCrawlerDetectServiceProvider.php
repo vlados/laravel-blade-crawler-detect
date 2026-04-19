@@ -31,7 +31,7 @@ class LaravelBladeCrawlerDetectServiceProvider extends PackageServiceProvider
         $compiledExclusions = $crawlerDetect->compileRegex((new Exclusions())->getAll());
 
         Blade::if('user', function () use ($compiledRegex, $compiledExclusions) {
-            $userAgent = request()?->userAgent() ?? $_SERVER['HTTP_USER_AGENT'] ?? '';
+            $userAgent = request()?->userAgent() ?? '';
 
             // Clamp before any regex runs: the UA header is attacker-controlled
             // and unbounded input against complex crawler patterns risks ReDoS.

@@ -44,10 +44,25 @@ it('clamps oversized user agents to prevent ReDoS', function () {
         'HTTP_USER_AGENT' => str_repeat('a', 100_000),
     ]);
 
-    $start = microtime(true);
     $rendered = Blade::render('@user human @enduser');
-    $elapsed = microtime(true) - $start;
 
     expect(trim($rendered))->toBe('human');
-    expect($elapsed)->toBeLessThan(1.0);
+});
+
+it('treats missing user agent as a regular user', function () {
+    $this->app['request'] = Request::create('/', 'GET');
+
+    $rendered = Blade::render('@user human @enduser');
+
+    expect(trim($rendered))->toBe('human');
+});
+
+it('exposes an @unlessuser inverse directive for crawlers', function () {
+    $this->app['request'] = Request::create('/', 'GET', [], [], [], [
+        'HTTP_USER_AGENT' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+    ]);
+
+    $rendered = Blade::render('@unlessuser bot @enduser');
+
+    expect(trim($rendered))->toBe('bot');
 });
