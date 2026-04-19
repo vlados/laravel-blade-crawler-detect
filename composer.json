@@ -1,10 +1,15 @@
 {
     "name": "vlados/laravel-blade-crawler-detect",
-    "description": "This is my package laravel-blade-crawler-detect",
+    "description": "Blade directives that branch on whether the current request comes from a human or a crawler — show buttons, scripts and widgets to users while serving SEO-focused markup to bots.",
     "keywords": [
         "vlados",
         "laravel",
-        "laravel-blade-crawler-detect"
+        "blade",
+        "crawler",
+        "bot",
+        "seo",
+        "user-agent",
+        "googlebot"
     ],
     "homepage": "https://github.com/vlados/laravel-blade-crawler-detect",
     "license": "MIT",
