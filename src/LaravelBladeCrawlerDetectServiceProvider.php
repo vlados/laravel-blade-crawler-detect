@@ -15,7 +15,11 @@ class LaravelBladeCrawlerDetectServiceProvider extends PackageServiceProvider
 
     public function packageRegistered()
     {
-        $this->app->singleton(CrawlerDetect::class, fn () => new CrawlerDetect());
+        // Bind (not singleton): CrawlerDetect caches $_SERVER headers in its
+        // constructor, so reusing a shared instance across requests under a
+        // long-running worker (Octane/Swoole) would leak the first caller's
+        // user agent to every subsequent request.
+        $this->app->bind(CrawlerDetect::class, fn () => new CrawlerDetect());
         $this->app->alias(CrawlerDetect::class, 'CrawlerDetect');
     }
 
